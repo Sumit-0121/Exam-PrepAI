@@ -1,0 +1,33 @@
+# AI-Assisted Rapid Exam Preparation System
+# Backend Dependencies
+
+# Web Framework
+flask==2.3.3
+flask-cors==4.0.0
+
+# PDF Processing
+pdfplumber==0.10.2
+
+# Image Processing & OCR
+Pillow==11.0.0
+pytesseract==0.3.10
+pdf2image==1.16.3
+
+# NLP
+nltk==3.8.1
+
+# AI Integration - Google Gemini 
+google-generativeai==0.3.2
+
+# YouTube API
+google-api-python-client==2.100.0
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Note: For pytesseract to work, you need to install Tesseract OCR:
+# Windows: Download from https://github.com/UB-Mannheim/tesseract/wiki
+
+# Note: For pdf2image to work, you need poppler:
+# Windows: Download from https://github.com/osber/poppler-windows/releases

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Exam Prep System</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 py-3">
+        <div class="max-w-5xl mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <h1 class="text-xl font-bold text-gray-800">AI Exam Prep System</h1>
+            </div>
+            <div id="connectionStatus" class="flex items-center">
+                <div id="backendStatusBadge" class="bg-yellow-100 px-3 py-2 rounded-full text-sm font-medium flex items-center mr-2" title="Backend connection status">
+                    <i class="fas fa-circle text-yellow-500 mr-2 text-xs"></i>
+                    <span class="text-yellow-700">Checking...</span>
+                </div>
+                <div id="currentMode" class="bg-purple-100/80 px-3 py-2 rounded-full text-sm font-medium flex items-center" title="Current preparation mode">
+                    <i class="fas fa-clock text-purple-600 mr-2 text-xs"></i>
+                    <span class="text-purple-700">Normal Mode</span>
+                </div>
+                <button onclick="resetApp()" class="ml-2 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded transition" title="Reset application">
+                    <i class="fas fa-refresh mr-1"></i>Reset
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Upload Section -->
+        <section id="uploadSection" class="mb-8">
+            <div class="card-gradient rounded-2xl card-shadow p-8">
+                <!-- Header with Title and Feature Badges -->
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Start Your Exam Preparation</h2>
+                    <p class="text-gray-500 mb-5">Upload your syllabus and previous year papers to get personalized study guidance</p>
+                    <!-- Feature Badges Row -->
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <span class="feature-badge bg-blue-50 text-blue-700">
+                            <i class="fas fa-file-pdf"></i>PDF Support
+                        </span>
+                        <span class="feature-badge bg-green-50 text-green-700">
+                            <i class="fas fa-image"></i>Image Recognition
+                        </span>
+                        <span class="feature-badge bg-purple-50 text-purple-700">
+                            <i class="fas fa-pencil-alt"></i>Handwritten Content
+                        </span>
+                        <span class="feature-badge bg-orange-50 text-orange-700">
+                            <i class="fas fa-bolt"></i>Fast Processing
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Upload Cards Grid - Two equal width + Time on right -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Syllabus Upload -->
+                    <div class="upload-zone rounded-xl p-5 cursor-pointer text-center" 
+                         id="syllabusZone" 
+                         onclick="document.getElementById('syllabusInput').click()"
+                         ondragover="handleDragOver(event, 'syllabusZone')"
+                         ondragleave="handleDragLeave('syllabusZone')"
+                         ondrop="handleDrop(event, 'syllabusInput', 'syllabusZone')">
+                        <label for="syllabusInput" class="sr-only">Upload Syllabus PDF</label>
+                        <input type="file" id="syllabusInput" accept=".pdf" class="hidden" title="Upload Syllabus PDF" onchange="handleFileSelect(this, 'syllabus')">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-purple-100 w-14 h-14 rounded-full flex items-center justify-center mb-3">
+                                <i class="fas fa-book text-xl text-purple-600"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-1">Syllabus PDF</h3>
+                            <p class="text-xs text-gray-500">Drag & drop or click to upload</p>
+                            <p id="syllabusFileName" class="text-xs text-green-600 font-medium hidden mt-2"></p>
+                        </div>
+                    </div>
+
+                    <!-- PYQ Upload -->
+                    <div class="upload-zone rounded-xl p-5 cursor-pointer text-center"
+                         id="pyqZone"
+                         onclick="document.getElementById('pyqInput').click()"
+                         ondragover="handleDragOver(event, 'pyqZone')"
+                         ondragleave="handleDragLeave('pyqZone')"
+                         ondrop="handleDrop(event, 'pyqInput', 'pyqZone')">
+                        <label for="pyqInput" class="sr-only">Upload Previous Year Question Papers (PDF)</label>
+                        <input type="file" id="pyqInput" accept=".pdf" multiple class="hidden" title="Upload Previous Year Question Papers (PDF)" onchange="handleFileSelect(this, 'pyq')">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mb-3">
+                                <i class="fas fa-file-alt text-xl text-blue-600"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-1">PYQ Papers (PDF)</h3>
+                            <p class="text-xs text-gray-500">Upload multiple question papers</p>
+                            <p id="pyqFileName" class="text-xs text-green-600 font-medium hidden mt-2"></p>
+                        </div>
+                    </div>
+
+                    <!-- Time Input -->
+                    <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="bg-orange-100 w-14 h-14 rounded-full flex items-center justify-center mb-3">
+                                <i class="fas fa-hourglass-half text-xl text-orange-600"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-3">Time Remaining</h3>
+                            <div class="flex items-center gap-3">
+                                <div>
+                                    <input type="number" id="daysInput" min="0" value="7"
+                                           class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-center text-sm"
+                                           aria-label="Days remaining" placeholder="Days" title="Days remaining"
+                                           onchange="updateModePreview()" oninput="updateModePreview()">
+                                    <label for="daysInput" class="text-xs text-gray-500 block mt-1">Days</label>
+                                </div>
+                                <div>
+                                    <input type="number" id="hoursInput" min="0" max="23" value="0"
+                                           class="w-16 px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-center text-sm"
+                                           placeholder="Hours" title="Hours remaining" aria-label="Hours remaining"
+                                           onchange="updateModePreview()" oninput="updateModePreview()">
+                                    <label class="text-xs text-gray-500 block mt-1">Hours</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preparation Mode Preview - Horizontal Cards -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-800 mb-4 text-lg">Preparation Mode Preview</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <!-- Normal Mode -->
+                        <div class="mode-card rounded-xl p-4 border border-gray-200 text-center cursor-pointer" id="modeNormal">
+                            <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-book-reader text-lg text-green-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm mb-1">Normal Mode</h4>
+                            <span class="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">7+ days</span>
+                        </div>
+                        
+                        <!-- Fast-Track Mode -->
+                        <div class="mode-card rounded-xl p-4 border border-gray-200 text-center cursor-pointer" id="modeFast">
+                            <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-tachometer-alt text-lg text-blue-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm mb-1">Fast-Track</h4>
+                            <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-medium">3-7 days</span>
+                        </div>
+                        
+                        <!-- High-Priority Mode -->
+                        <div class="mode-card rounded-xl p-4 border border-gray-200 text-center cursor-pointer" id="modeHigh">
+                            <div class="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-fire text-lg text-orange-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm mb-1">High-Priority</h4>
+                            <span class="inline-block bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-medium">1-3 days</span>
+                        </div>
+                        
+                        <!-- Crisis Mode -->
+                        <div class="mode-card rounded-xl p-4 border border-gray-200 text-center cursor-pointer" id="modeCrisis">
+                            <div class="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-bolt text-lg text-red-600"></i>
+                            </div>
+                            <h4 class="font-semibold text-gray-800 text-sm mb-1">Crisis Mode</h4>
+                            <span class="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">&lt;24 hrs</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Primary CTA Button - Full width, prominent -->
+                <button id="analyzeBtn" onclick="startAnalysis()"
+                        class="w-full primary-cta text-white py-4 rounded-xl font-semibold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed mt-6">
+                    <i class="fas fa-magic mr-2"></i><span id="analyzeBtnText">Generate Study Plan</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Loading Section -->
+        <section id="loadingSection" class="hidden">
+            <div class="card-gradient rounded-2xl shadow-xl p-12 text-center">
+                <div class="loading-spinner mx-auto mb-6"></div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Analyzing Your Materials</h3>
+                <p id="loadingStatus" class="text-gray-600">Extracting text from PDFs...</p>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-6 max-w-md mx-auto">
+                    <div id="progressBar" class="progress-bar h-2 rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboardSection" class="hidden">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <div class="card-gradient rounded-xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-purple-100 p-3 rounded-lg flex-shrink-0">
+                            <i class="fas fa-layer-group text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800" id="statTopics">0</p>
+                            <p class="text-sm text-gray-500">Topics</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-gradient rounded-xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-blue-100 p-3 rounded-lg flex-shrink-0">
+                            <i class="fas fa-question-circle text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800" id="statQuestions">0</p>
+                            <p class="text-sm text-gray-500">PYQ Questions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-gradient rounded-xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-orange-100 p-3 rounded-lg flex-shrink-0">
+                            <i class="fas fa-clock text-orange-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800" id="statTime">0</p>
+                            <p class="text-sm text-gray-500">Hours Left</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-gradient rounded-xl p-4 shadow-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="bg-green-100 p-3 rounded-lg flex-shrink-0">
+                            <i class="fas fa-percentage text-green-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800" id="statCoverage">0%</p>
+                            <p class="text-sm text-gray-500">Coverage</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="switchTab('priorities')" class="tab-btn tab-active px-4 py-2 rounded-lg font-medium transition text-sm" data-tab="priorities">
+                    <i class="fas fa-sort-amount-up mr-2"></i>Priorities
+                </button>
+                <button onclick="switchTab('notes')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="notes">
+                    <i class="fas fa-sticky-note mr-2"></i>Notes
+                </button>
+                <button onclick="switchTab('questions')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="questions">
+                    <i class="fas fa-question mr-2"></i>Questions
+                </button>
+                <button onclick="switchTab('mcqs')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="mcqs">
+                    <i class="fas fa-tasks mr-2"></i>MCQs
+                </button>
+                <button onclick="switchTab('revision')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="revision">
+                    <i class="fas fa-redo mr-2"></i>Revision
+                </button>
+                <button onclick="switchTab('timetable')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="timetable">
+                    <i class="fas fa-calendar-alt mr-2"></i>Timetable
+                </button>
+                <button onclick="switchTab('videos')" class="tab-btn bg-white px-4 py-2 rounded-lg font-medium transition shadow text-sm" data-tab="videos">
+                    <i class="fab fa-youtube mr-2"></i>Videos
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tabContent" class="card-gradient rounded-2xl shadow-xl p-6">
+                <!-- Content will be loaded dynamically -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 sm:py-6 mt-8 sm:mt-12">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 text-center">
+            <p class="text-gray-400 text-sm sm:text-base">AI-Assisted Rapid Exam Preparation System</p>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">Built for efficient exam preparation</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

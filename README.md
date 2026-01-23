@@ -1,2 +1,2 @@
-# Exam-PrepAI
-Logic-driven AI exam preparation system using syllabus + PYQs
+<<<<<<< HEAD
+>>>>>>> 23b10c3 (Initial commit)

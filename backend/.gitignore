@@ -1,0 +1,21 @@
+# Environment
+backend/.env
+backend/venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Database
+exam_prep.db
+
+# Uploads
+backend/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
