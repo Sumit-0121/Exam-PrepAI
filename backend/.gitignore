@@ -1,21 +1,36 @@
-# Environment
+# ========== ENVIRONMENT ==========
 backend/.env
-backend/venv/
+.env
 
-# Python
+# ========== VIRTUAL ENV ==========
+backend/venv/
+venv/
+
+# ========== PYTHON ==========
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
 
-# Database
+# ========== DATABASE ==========
 exam_prep.db
+*.db
 
-# Uploads
+# ========== UPLOADS ==========
 backend/uploads/
+uploads/
 
-# OS
+# ========== OS ==========
 .DS_Store
 Thumbs.db
 
-# IDE
+# ========== IDE ==========
 .vscode/
 .idea/
+
+# ========== CACHE ==========
+.pytest_cache/
+.mypy_cache/
