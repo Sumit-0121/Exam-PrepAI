@@ -1,8 +1,8 @@
 # 🎓 Exam-PrepAI  
-### AI-Powered Smart Exam Preparation Platform
+## AI-Powered Smart Exam Preparation Platform
 
-> **Exam-PrepAI** is an intelligent exam preparation system that uses **Artificial Intelligence** to automate learning, revision, and exam readiness.  
-> It enables students to generate structured study material, analyze topics, process previous year questions, and prepare effectively using AI-driven workflows.
+**Exam-PrepAI** is an intelligent exam preparation system that uses **Artificial Intelligence** to automate learning, revision, and exam readiness.  
+It enables students to generate structured study material, analyze topics, process previous year questions, and prepare effectively using AI-driven workflows.
 
 This project is developed as a **college project** and structured using **industry-standard architecture** to ensure scalability, security, and maintainability.
 
@@ -53,12 +53,13 @@ This project is developed as a **college project** and structured using **indust
 ---
 
 ## 🗂 Project Structure
-```bash
+
+```text
 Exam-PrepAI/
 │
 ├── backend/
-│ ├── app.py
-│ ├── requirements.txt
+│   ├── app.py
+│   ├── requirements.txt
 │
 ├── index.html
 ├── script.js
@@ -69,11 +70,13 @@ Exam-PrepAI/
 
 
 ## 🧠 System Architecture
+```pgsql
 Data Flow
 User → Frontend → Flask API → AI Engine → Processing → Database → Response
 
 AI Pipeline
 Input → Preprocessing → AI Model → Structuring → Validation → Storage → Output
+```
 
 ---
 
