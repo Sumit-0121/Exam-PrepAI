@@ -1,58 +1,130 @@
 # 🎓 Exam-PrepAI  
-## AI-Powered Smart Exam Preparation Platform
+### AI-Assisted Rapid Exam Preparation System
 
-**Exam-PrepAI** is an intelligent exam preparation system that uses **Artificial Intelligence** to automate learning, revision, and exam readiness.  
-It enables students to generate structured study material, analyze topics, process previous year questions, and prepare effectively using AI-driven workflows.
+**Exam-PrepAI** is a full-stack AI-powered exam preparation platform designed to automate syllabus analysis, topic prioritization, intelligent content generation, and strategic revision planning using AI-driven pipelines.
 
-This project is developed as a **college project** and structured using **industry-standard architecture** to ensure scalability, security, and maintainability.
+This system transforms raw academic inputs (syllabus PDFs and previous year question papers) into a structured, prioritized, and exam-oriented preparation workflow using NLP, OCR, AI models, and intelligent scheduling logic.
 
----
-
-## ✨ Highlights
-
-- AI-powered learning system  
-- Smart content generation  
-- Automated revision engine  
-- Intelligent topic analysis  
-- Structured AI workflows  
-- Modular backend architecture  
-- Secure configuration system  
-- Clean and scalable project structure  
-- Academic + portfolio ready  
-- Production-grade design  
+Developed as an academic + portfolio-grade project with production-grade architecture.
 
 ---
 
-## 🚀 Features
+## 🚀 Core Capabilities
 
-- 📄 AI-generated notes  
-- 🧠 Topic intelligence engine  
-- ❓ AI-based content generation  
-- 📊 Previous Year Question (PYQ) analysis  
-- 🔁 Smart revision system  
-- 🧩 Modular system architecture  
-- 🔐 Secure environment handling  
-- ⚙️ Scalable AI backend design  
+### 📄 Intelligent Document Processing
+- PDF syllabus extraction
+- Multi-file PYQ processing
+- OCR for scanned PDFs
+- Handwritten content support
+- Image-based text extraction
+- Parallel PDF processing
+
+### 🧠 AI Intelligence Layer
+- Topic extraction engine
+- Subtopic generation
+- NLP-based keyword mapping
+- Question-topic correlation
+- Frequency-based topic scoring
+- AI caching & quota management
+- Fallback logic (offline-safe mode)
+
+### 🎯 Exam-Oriented Intelligence
+- Priority-based topic classification (High / Medium / Low)
+- Exam weight estimation
+- Marks-based content structuring
+- Scoring-oriented answer generation
+- PYQ pattern analysis
+- Exam strategy modeling
+
+### ⏱ Time-Aware Preparation System
+- Crisis Mode (< 24 hrs)
+- High-Priority Mode (1–3 days)
+- Fast-Track Mode (3–7 days)
+- Normal Mode (7+ days)
+- Adaptive topic filtering by time availability
+
+### 📚 AI Content Engine
+- Exam-oriented notes generation
+- Learning-focused notes mode
+- Likely exam questions generator
+- MCQ generator
+- Revision bullet generator
+- Structured JSON AI pipelines
+
+### 📊 System Outputs
+- AI-generated structured notes
+- Topic-wise exam questions
+- MCQs with explanations
+- Smart revision points
+- Priority dashboards
+- Study plan visualization
+- PDF export of generated notes
 
 ---
 
-## 🧱 Technology Stack
+## 🧱 System Architecture
+
+### Data Flow:
+User Input
+→ Frontend (HTML/CSS/JS)
+→ Flask API
+→ PDF Processor
+→ OCR Engine
+→ NLP Engine
+→ Topic Extractor
+→ Priority Engine
+→ AI Engine (Gemini)
+→ AI Structuring Layer
+→ SQLite Storage
+→ Response API
+→ Frontend Rendering
+
+
+### AI Pipeline:
+Input Data
+→ Preprocessing
+→ OCR
+→ NLP Parsing
+→ Topic Detection
+→ PYQ Mapping
+→ Priority Scoring
+→ Mode Filtering
+→ AI Prompt Engineering
+→ AI Generation
+→ Validation Layer
+→ Structuring Engine
+→ Storage
+→ UI Rendering
+
+
+---
+
+## 🛠 Technology Stack
 
 ### Backend
-- Python  
-- Flask  
-- SQLite  
-- Gemini API  
-- dotenv  
+- Python
+- Flask
+- SQLite
+- Gemini API (Google GenAI)
+- YouTube API
+- Tesseract OCR
+- PyMuPDF / pdfplumber
+- pdf2image
+- NLTK
+- dotenv
+- Multithreading
+- Concurrent processing
 
 ### Frontend
-- HTML  
-- CSS  
-- JavaScript  
+- HTML5
+- TailwindCSS
+- JavaScript (Vanilla)
+- FontAwesome
+- jsPDF
 
 ---
 
-## 🗂 Project Structure
+## 📁 Project Structure
 
 ```text
 Exam-PrepAI/
