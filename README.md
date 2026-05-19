@@ -62,6 +62,8 @@ Developed as an academic + portfolio-grade project.
 
 ---
 
+---
+
 ## System Architecture
 
 ### Data Flow:
@@ -96,6 +98,7 @@ Input Data
 → Storage
 → UI Rendering
 
+---
 
 ---
 
@@ -192,6 +195,8 @@ python app.py
 http://127.0.0.1:5000
 ```
 
+---
+
 # Developer
 
 ## Sumit Prasad
@@ -201,3 +206,5 @@ http://127.0.0.1:5000
 - LinkedIn: https://www.linkedin.com/in/sumit-prasad-5111b2312
 - GitHub: https://github.com/Sumit-0121
 - Email: sumitprasad2105@gmail.com
+
+---
