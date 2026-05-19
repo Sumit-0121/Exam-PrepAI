@@ -1,4 +1,4 @@
-# 🎓 Exam-PrepAI  
+#  Exam-PrepAI  
 ### AI-Assisted Rapid Exam Preparation System
 
 **Exam-PrepAI** is a full-stack AI-powered exam preparation platform designed to automate syllabus analysis, topic prioritization, intelligent content generation, and strategic revision planning using AI-driven pipelines.
@@ -9,9 +9,9 @@ Developed as an academic + portfolio-grade project with production-grade archite
 
 ---
 
-## 🚀 Core Capabilities
+## Core Capabilities
 
-### 📄 Intelligent Document Processing
+### Intelligent Document Processing
 - PDF syllabus extraction
 - Multi-file PYQ processing
 - OCR for scanned PDFs
@@ -19,7 +19,7 @@ Developed as an academic + portfolio-grade project with production-grade archite
 - Image-based text extraction
 - Parallel PDF processing
 
-### 🧠 AI Intelligence Layer
+### AI Intelligence Layer
 - Topic extraction engine
 - Subtopic generation
 - NLP-based keyword mapping
@@ -28,7 +28,7 @@ Developed as an academic + portfolio-grade project with production-grade archite
 - AI caching & quota management
 - Fallback logic (offline-safe mode)
 
-### 🎯 Exam-Oriented Intelligence
+### Exam-Oriented Intelligence
 - Priority-based topic classification (High / Medium / Low)
 - Exam weight estimation
 - Marks-based content structuring
@@ -36,14 +36,14 @@ Developed as an academic + portfolio-grade project with production-grade archite
 - PYQ pattern analysis
 - Exam strategy modeling
 
-### ⏱ Time-Aware Preparation System
+### Time-Aware Preparation System
 - Crisis Mode (< 24 hrs)
 - High-Priority Mode (1–3 days)
 - Fast-Track Mode (3–7 days)
 - Normal Mode (7+ days)
 - Adaptive topic filtering by time availability
 
-### 📚 AI Content Engine
+### AI Content Engine
 - Exam-oriented notes generation
 - Learning-focused notes mode
 - Likely exam questions generator
@@ -51,7 +51,7 @@ Developed as an academic + portfolio-grade project with production-grade archite
 - Revision bullet generator
 - Structured JSON AI pipelines
 
-### 📊 System Outputs
+### System Outputs
 - AI-generated structured notes
 - Topic-wise exam questions
 - MCQs with explanations
@@ -62,7 +62,7 @@ Developed as an academic + portfolio-grade project with production-grade archite
 
 ---
 
-## 🧱 System Architecture
+## System Architecture
 
 ### Data Flow:
 User Input
@@ -99,7 +99,7 @@ Input Data
 
 ---
 
-## 🛠 Technology Stack
+## Technology Stack
 
 ### Backend
 - Python
@@ -124,7 +124,7 @@ Input Data
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 Exam-PrepAI/
@@ -141,7 +141,7 @@ Exam-PrepAI/
 ```
 
 
-## 🧠 System Architecture
+## System Architecture
 ```pgsql
 Data Flow
 User → Frontend → Flask API → AI Engine → Processing → Database → Response
@@ -152,7 +152,7 @@ Input → Preprocessing → AI Model → Structuring → Validation → Storage 
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 1️⃣ Clone Repository
 ```bash
@@ -192,3 +192,12 @@ python app.py
 http://127.0.0.1:5000
 ```
 
+# Developer
+
+## Sumit Prasad
+
+### Connect With Me
+
+- LinkedIn: https://www.linkedin.com/in/sumit-prasad-5111b2312
+- GitHub: https://github.com/Sumit-0121
+- Email: sumitprasad2105@gmail.com
