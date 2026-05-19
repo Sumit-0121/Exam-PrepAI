@@ -136,11 +136,11 @@ Exam-PrepAI/
 │   ├── app.py
 │   ├── requirements.txt
 │
-├── index.html
-├── script.js
-├── styles.css
 ├── README.md
-└── run.bat
+├── index.html
+├── run.bat
+├── script.js
+└── styles.css
 ```
 
 
