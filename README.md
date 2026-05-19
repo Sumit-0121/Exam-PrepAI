@@ -5,7 +5,7 @@
 
 This system transforms raw academic inputs (syllabus PDFs and previous year question papers) into a structured, prioritized, and exam-oriented preparation workflow using NLP, OCR, AI models, and intelligent scheduling logic.
 
-Developed as an academic + portfolio-grade project with production-grade architecture.
+Developed as an academic + portfolio-grade project.
 
 ---
 
