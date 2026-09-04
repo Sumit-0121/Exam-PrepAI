@@ -1,6 +1,4 @@
-/**************************************************
- * GLOBAL STATE (UI IS DRIVEN FROM THIS ONLY)
- **************************************************/
+/*GLOBAL STATE (UI IS DRIVEN FROM THIS ONLY)*/
 let appState = {
     syllabusFile: null,
     pyqFiles: [],
@@ -19,9 +17,7 @@ let appState = {
     currentTab: 'priorities'
 };
 
-/**************************************************
- * CONFIG
- **************************************************/
+/* CONFIG*/
 const API_BASE = 'http://localhost:5000/api';
 const uploadSection = document.getElementById('uploadSection');
 const loadingSection = document.getElementById('loadingSection');
@@ -32,13 +28,7 @@ const daysInput = document.getElementById('daysInput');
 const hoursInput = document.getElementById('hoursInput');
 
 
-
-
-
-
-/**************************************************
- * FILE HANDLING
- **************************************************/
+/* FILE HANDLING*/
 
 function handleDragOver(e, zoneId) {
     e.preventDefault();
@@ -73,9 +63,7 @@ function handleFileSelect(input, type) {
     updateModePreview();
 }
 
-/**************************************************
- * MODE CALCULATION
- **************************************************/
+/* MODE CALCULATION*/
 function calculateMode(days, hours) {
     const total = days * 24 + hours;
     if (total < 24) return 'crisis';
@@ -100,9 +88,7 @@ function updateModePreview() {
         `<i class="fas fa-clock mr-2"></i>${modeNames[appState.mode]}`;
 }
 
-/**************************************************
- * START ANALYSIS
- **************************************************/
+/* START ANALYSIS*/
 async function startAnalysis() {
     if (!appState.syllabusFile) {
         showNotification('Upload syllabus first', 'warning');
@@ -124,9 +110,7 @@ async function startAnalysis() {
 
 
 
-/**************************************************
- * REAL BACKEND ANALYSIS (FILLS appState ONLY)
- **************************************************/
+/* REAL BACKEND ANALYSIS (FILLS appState ONLY)*/
 async function performRealAnalysis() {
     const formData = new FormData();
     formData.append('syllabus', appState.syllabusFile);
@@ -162,9 +146,7 @@ async function performRealAnalysis() {
 }
 
 
-/**************************************************
- * STATS UPDATE
- **************************************************/
+/* STATS UPDATE*/
 function updateStats() {
     const totalTopics = appState.topics.length;
     const totalQuestions = appState.questions.length;
@@ -180,9 +162,7 @@ function updateStats() {
     document.getElementById('statCoverage').textContent = `${coverage}%`;
 }
 
-/**************************************************
- * TAB SWITCHING
- **************************************************/
+/* TAB SWITCHING*/
 function switchTab(tabName) {
     appState.currentTab = tabName;
 
@@ -202,9 +182,7 @@ function switchTab(tabName) {
     renderTabContent();
 }
 
-/**************************************************
- * TAB CONTENT RENDERING
- **************************************************/
+/*TAB CONTENT RENDERING*/
 function renderTabContent() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -236,9 +214,7 @@ function renderTabContent() {
     }
 }
 
-/**************************************************
- * PRIORITIES RENDERING
- **************************************************/
+/*PRIORITIES RENDERING*/
 function renderPriorities() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -294,9 +270,7 @@ function renderPriorities() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * NOTES RENDERING
- **************************************************/
+/*NOTES RENDERING*/
 function renderNotes() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -380,9 +354,7 @@ function renderNotes() {
 }
 
 
-/**************************************************
- * QUESTIONS RENDERING
- **************************************************/
+/*QUESTIONS RENDERING*/
 function renderQuestions() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -521,9 +493,7 @@ function renderQuestions() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * MCQS RENDERING
- **************************************************/
+/*MCQS RENDERING*/
 function renderMCQs() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -701,9 +671,7 @@ function renderMCQs() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * REVISION RENDERING
- **************************************************/
+/*REVISION RENDERING*/
 function renderRevision() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -830,9 +798,7 @@ function renderRevision() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * TIMETABLE RENDERING
- **************************************************/
+/*TIMETABLE RENDERING*/
 function renderTimetable() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -1051,9 +1017,7 @@ function renderTimetable() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * VIDEOS RENDERING
- **************************************************/
+/*VIDEOS RENDERING*/
 function renderVideos() {
     const contentDiv = document.getElementById('tabContent');
     if (!contentDiv) return;
@@ -1242,9 +1206,7 @@ function renderVideos() {
     contentDiv.innerHTML = html;
 }
 
-/**************************************************
- * HELPER FUNCTIONS
- **************************************************/
+/*HELPER FUNCTIONS*/
 function renderTopicCard(topic, priority) {
     const colors = {
         high: 'border-red-300 bg-red-50',
@@ -1437,9 +1399,7 @@ function formatContent(content) {
     return content;
 }
 
-/**************************************************
- * NOTIFICATIONS
- **************************************************/
+/*NOTIFICATIONS*/
 function showNotification(message, type = 'info') {
     const old = document.getElementById('cool-toast');
     if (old) old.remove();
@@ -1510,9 +1470,7 @@ function showNotification(message, type = 'info') {
     }, 3500);
 }
 
-/**************************************************
- * RESET APP
- **************************************************/
+/*RESET APP*/
 function downloadAllNotes() {
     const topicNames = Object.keys(appState.notes);
 
@@ -1660,9 +1618,7 @@ function resetApp() {
     showNotification('Application reset successfully', 'success');
 }
 
-/**************************************************
- * BACKEND CONNECTIVITY CHECK
- **************************************************/
+/*BACKEND CONNECTIVITY CHECK*/
 async function checkBackendConnectivity() {
     const badge = document.getElementById('backendStatusBadge');
     if (!badge) return;
@@ -1684,9 +1640,7 @@ async function checkBackendConnectivity() {
     }
 }
 
-/**************************************************
- * INIT
- **************************************************/
+/*INIT*/
 updateModePreview();
 document.addEventListener('DOMContentLoaded', () => {
     checkBackendConnectivity();
@@ -1695,9 +1649,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/**************************************************
- * MODE + BACKEND STATUS
- **************************************************/
+/*MODE + BACKEND STATUS*/
 function updateBackendStatusUI(status) {
     const badge = document.getElementById('backendStatusBadge');
 
@@ -1724,9 +1676,7 @@ function updateBackendStatusUI(status) {
     }
 }
 
-/**************************************************
- * MCQ ANSWER REVEAL FUNCTION
- **************************************************/
+/*MCQ ANSWER REVEAL FUNCTION*/
 function revealMCQAnswer(optionElement, correctAnswer, explanation) {
     // Find the parent MCQ card
     const mcqCard = optionElement.closest('.mcq-card');
