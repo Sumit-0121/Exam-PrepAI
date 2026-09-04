@@ -195,12 +195,17 @@ python app.py
 http://127.0.0.1:5000
 ```
 
+### NOTE
+```pgsql
+ For pytesseract to work, you need to install Tesseract OCR.
+
+ For pdf2image to work, you need poppler.
+```
+
 ---
 
 # Developer
-
 ## Sumit Prasad
-
 ### Connect With Me
 
 - LinkedIn: https://www.linkedin.com/in/sumit-prasad-5111b2312
