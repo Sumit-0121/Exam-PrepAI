@@ -4,11 +4,11 @@
 #to run the backend server:
 # python .\backend\app.py
 
-# ================= AI QUOTA MANAGER =================
+# ==== AI QUOTA MANAGER ====
 
 AI_REQUEST_COUNT = 0
-AI_REQUEST_LIMIT = 15   # safe buffer under 20 free-tier limit
-AI_CACHE = {}           # topic-level cache
+AI_REQUEST_LIMIT = 15   
+AI_CACHE = {}           
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -100,9 +100,7 @@ UPLOAD_FOLDER = 'uploads'
 DATABASE = 'exam_prep.db'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# ============================================================
-# DATABASE SETUP
-# ============================================================
+#== DATABASE SETUP ===
 
 def init_db():
     """Initialize SQLite database with schema"""
@@ -181,9 +179,7 @@ def init_db():
 
 init_db()
 
-# ============================================================
-# PDF PROCESSING
-# ============================================================
+# ==  PDF PROCESSING ==
 
 def extract_text_pdfplumber(pdf_path):
     """Extract text using pdfplumber"""
@@ -224,8 +220,7 @@ def extract_images_from_pdf(pdf_path):
                         'bytes': image_bytes
                     })
                 
-                # Also render page as image for handwritten content detection
-                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2))  # 2x zoom for better OCR
+                pix = page.get_pixmap(matrix=fitz.Matrix(2, 2)) 
                 img_bytes = pix.tobytes("png")
                 images.append({
                     'page': page_num + 1,
@@ -297,23 +292,20 @@ def extract_pdf_text_with_ocr(pdf_path, api_key=None):
         regular_text = extract_text_pdfplumber(pdf_path)
     elif PDF_LIBRARY == 'pymupdf':
         regular_text = extract_text_pymupdf(pdf_path)
-    
-    # Check if text extraction was successful
+
     text_quality = len(regular_text.strip()) if regular_text else 0
-    
-    # If text is too short or we have OCR capabilities, try OCR
+
     ocr_text = ""
     if text_quality < 500 or TESSERACT_AVAILABLE or (api_key and GEMINI_AVAILABLE):
         images = extract_images_from_pdf(pdf_path)
         
-        # Filter to only full page images for OCR (more efficient)
         page_images = [img for img in images if img.get('is_page', False)]
         
         if page_images:
             # Process pages in parallel for speed
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 futures = []
-                for page_data in page_images[:10]:  # Limit to first 10 pages for speed
+                for page_data in page_images[:10]:  
                     future = executor.submit(process_page_ocr, page_data, api_key)
                     futures.append(future)
                 
@@ -342,23 +334,17 @@ def extract_pdf_text(pdf_path, api_key=None):
 
 def clean_text(text):
     """Clean and normalize extracted text"""
-    # Remove multiple spaces
+   
     text = re.sub(r'\s+', ' ', text)
-    # Remove special characters but keep essential punctuation
     text = re.sub(r'[^\w\s.,;:?!\-()]', '', text)
-    # Normalize whitespace
     text = text.strip()
     return text
 
-# ============================================================
-# TOPIC EXTRACTION
-# ============================================================
+# == TOPIC EXTRACTIO ==
 
 def extract_topics_from_syllabus(syllabus_text):
     """Extract topics and subtopics from syllabus text"""
     topics = []
-    
-    # Common patterns for topic headers
     patterns = [
         r'(?:Unit|Chapter|Module|Topic)\s*[\d.:\-]+\s*[:\-]?\s*(.+?)(?=\n|$)',
         r'(?:^|\n)(\d+\.?\s+[A-Z][^.\n]{10,50})',
@@ -373,8 +359,6 @@ def extract_topics_from_syllabus(syllabus_text):
             topic_name = clean_text(match).strip()
             if len(topic_name) > 3 and len(topic_name) < 100:
                 found_topics.add(topic_name)
-    
-    # If no topics found, use keyword extraction
     if not found_topics:
         found_topics = extract_topics_nlp(syllabus_text)
     
@@ -386,11 +370,10 @@ def extract_topics_from_syllabus(syllabus_text):
             'subtopics': subtopics if subtopics else ['Overview', 'Key Concepts', 'Applications']
         })
     
-    # Fallback if still no topics
     if not topics:
         topics = generate_sample_topics()
     
-    return topics[:15]  # Limit to 15 topics
+    return topics[:15]  
 
 def extract_topics_nlp(text):
     """Extract topics using NLP techniques"""
@@ -401,10 +384,7 @@ def extract_topics_nlp(text):
             words = word_tokenize(text.lower())
             stop_words = set(stopwords.words('english'))
             
-            # Get meaningful words
             meaningful = [w for w in words if w.isalpha() and w not in stop_words and len(w) > 3]
-            
-            # Get most common terms
             word_freq = Counter(meaningful)
             common_terms = word_freq.most_common(20)
             
@@ -413,8 +393,6 @@ def extract_topics_nlp(text):
                     topics.add(term.title())
         except:
             pass
-    
-    # Add common CS topics if text contains keywords
     cs_topics = {
         'data structure': 'Data Structures',
         'algorithm': 'Algorithms',
@@ -445,7 +423,6 @@ def extract_subtopics(text, topic):
     
     if match:
         content = match.group(1)
-        # Split by common delimiters
         parts = re.split(r'[,;.\n]', content)
         for part in parts:
             part = part.strip()
@@ -467,9 +444,7 @@ def generate_sample_topics():
         {'name': 'Software Engineering', 'subtopics': ['SDLC', 'Agile', 'Testing', 'Design Patterns']}
     ]
 
-# ============================================================
-# QUESTION EXTRACTION
-# ============================================================
+# == QUESTION EXTRACTION ==
 
 def estimate_marks(topic_name, topic_questions):
     if not topic_questions:
@@ -490,8 +465,6 @@ def estimate_marks(topic_name, topic_questions):
 def extract_questions_from_pyq(pyq_text):
     """Extract individual questions from PYQ text"""
     questions = []
-    
-    # Patterns for question detection
     patterns = [
         r'(?:Q\.?\s*\d+|Question\s*\d+)[.:\)]\s*(.+?)(?=Q\.?\s*\d+|Question\s*\d+|$)',
         r'(?:\d+[\.\)]\s*)(.+?\?)',
@@ -526,11 +499,9 @@ def extract_questions_from_pyq(pyq_text):
             seen.add(q_hash)
             unique_questions.append(q)
     
-    return unique_questions[:50]  # Limit to 50 questions
+    return unique_questions[:50]  
 
-# ============================================================
-# TOPIC-QUESTION MAPPING
-# ============================================================
+# == TOPIC-QUESTION MAPPING ==
 
 def map_questions_to_topics(topics, questions):
     """Map questions to topics using keyword matching"""
@@ -575,9 +546,7 @@ def calculate_frequencies(topics, topic_questions):
         topic['frequency'] = len(topic_questions.get(topic['name'], []))
     return topics
 
-# ============================================================
-# PRIORITY CALCULATION
-# ============================================================
+# == PRIORITY CALCULATION ==
 
 def calculate_priorities(topics):
     """Calculate priority scores and classify topics"""
@@ -585,14 +554,9 @@ def calculate_priorities(topics):
     max_freq = max(t['frequency'] for t in topics) if topics else 1
     
     for topic in topics:
-        # Normalize frequency
         freq_score = (topic['frequency'] / max_freq) * 10 if max_freq > 0 else 5
         weight = topic.get('weight', 0.5)
-        
-        # Priority Score = (Frequency * 0.6) + (Weight * 10 * 0.4)
         topic['priority_score'] = (freq_score * 0.6) + (weight * 10 * 0.4)
-    
-    # Sort by priority score
     topics.sort(key=lambda x: x['priority_score'], reverse=True)
     
     # Classify into priority levels
@@ -617,9 +581,7 @@ def calculate_priorities(topics):
     
     return topics, priorities
 
-# ============================================================
-# TIME-AWARE INTELLIGENCE
-# ============================================================
+# == TIME-AWARE INTELLIGENCE ==
 
 def calculate_mode(days, hours):
     """Determine preparation mode based on available time"""
@@ -646,9 +608,7 @@ def filter_topics_by_mode(priorities, mode):
         return priorities['high'] + priorities['medium'] + priorities['low']
      
 
-# ============================================================
-# UNIVERSAL LOGIC ENGINE 
-# ============================================================
+# == UNIVERSAL LOGIC ENGINE ==
 
 def build_exam_only_notes_prompt(topic_name, branch, mode, expected_marks):
     return f"""
@@ -972,9 +932,7 @@ RULES:
 - Valid JSON only
 """
 
-# ============================================================
-# AI CONTENT GENERATION
-# ============================================================
+# == AI CONTENT GENERATION ==
 
 def generate_ai_content(topic, api_key, mode="normal", topic_questions=None):
     global AI_REQUEST_COUNT, AI_CACHE
@@ -1014,7 +972,7 @@ def generate_ai_content(topic, api_key, mode="normal", topic_questions=None):
         AI_REQUEST_COUNT += 1
         raw = ai_generate(prompt)
 
-        data = json.loads(raw)   # strict JSON expected
+        data = json.loads(raw)   
 
         result = {
             "notes": data.get("notes", ""),
@@ -1024,7 +982,7 @@ def generate_ai_content(topic, api_key, mode="normal", topic_questions=None):
             "source": "ai"
         }
 
-        AI_CACHE[topic_name] = result   # cache it
+        AI_CACHE[topic_name] = result  
         print(f"✅ AI BATCH DONE → {topic_name}")
         return result
 
@@ -1091,10 +1049,7 @@ def ai_generate(prompt):
     except:
         raise Exception(f"Invalid Gemini response: {data}")
 
-# ============================================================
-# TIMETABLE GENERATION
-# ============================================================
-
+# == TIMETABLE GENERATION ==
 def generate_timetable(topics, days, hours, mode):
     """Generate study timetable based on priorities and time"""
     timetable = []
@@ -1156,9 +1111,7 @@ def generate_timetable(topics, days, hours, mode):
     
     return timetable
 
-# ============================================================
-# YOUTUBE VIDEO INTEGRATION
-# ============================================================
+# == YOUTUBE VIDEO INTEGRATION ==
 
 def fetch_youtube_videos(topic, api_key=None):
     """Fetch relevant YouTube videos for a topic"""
@@ -1174,8 +1127,6 @@ def fetch_youtube_videos(topic, api_key=None):
 def parse_youtube_duration(duration_str):
     """Parse ISO 8601 duration format to human readable format"""
     import re
-
-    # Match ISO 8601 duration format (PT#H#M#S)
     match = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', duration_str)
     if not match:
         return 'N/A'
@@ -1268,9 +1219,7 @@ def search_youtube(query):
     return request.execute()
 
 
-# ============================================================
-# API ENDPOINTS
-# ============================================================
+# == API ENDPOINTS ==
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -1285,7 +1234,7 @@ def health_check():
         'tesseract_available': TESSERACT_AVAILABLE,
         'pdf2image_available': PDF2IMAGE_AVAILABLE,
         'pil_available': PIL_AVAILABLE,
-        'handwriting_support': GEMINI_AVAILABLE  # Gemini Vision for handwriting
+        'handwriting_support': GEMINI_AVAILABLE  
     })
 
 @app.route('/api/analyze', methods=['POST'])
@@ -1573,9 +1522,7 @@ def test_youtube():
         "response": r.text
     })
 
-# ============================================================
-# MAIN
-# ============================================================
+# === MAIN ===
 
 if __name__ == '__main__':
     print("=" * 60)
