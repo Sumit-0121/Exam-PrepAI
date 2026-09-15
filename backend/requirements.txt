@@ -1,4 +1,3 @@
-# AI-Assisted Rapid Exam Preparation System
 # Backend Dependencies
 
 # Web Framework
