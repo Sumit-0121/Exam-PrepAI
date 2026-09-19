@@ -5,8 +5,6 @@
 
 This system transforms raw academic inputs (syllabus PDFs and previous year question papers) into a structured, prioritized, and exam-oriented preparation workflow using NLP, OCR, AI models, and intelligent scheduling logic.
 
-Developed as an academic + portfolio-grade project.
-
 ---
 
 ## Core Capabilities
@@ -62,7 +60,6 @@ Developed as an academic + portfolio-grade project.
 
 ---
 
----
 
 ## System Architecture
 
@@ -100,7 +97,6 @@ Input Data
 
 ---
 
----
 
 ## Technology Stack
 
@@ -201,6 +197,7 @@ http://127.0.0.1:5000
 
  For pdf2image to work, you need poppler.
 ```
+---
 
 ##  Developer
 
